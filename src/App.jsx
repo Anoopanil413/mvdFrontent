@@ -5,6 +5,7 @@ import RegistrationForm from './pages/Register/Register';
 import VerificationForm from './pages/Login/VerificationForm';
 import { VehicleSearch } from './components/vehicleSearch/VehicleSearch';
 import { AddVehicleForm } from './components/vehicles/AddVehicleForm';
+import { AppProvider } from './context/AppContext';
 // import Registration from './components/Registration';
 // import OtpVerification from './components/OtpVerification';
 // import Dashboard from './components/Dashboard';
@@ -13,6 +14,7 @@ import { AddVehicleForm } from './components/vehicles/AddVehicleForm';
 
 function App() {
   return (
+    <AppProvider>
     <Router>
       <Routes>
       <Route path="/login" element={<LoginForm />} />
@@ -25,6 +27,7 @@ function App() {
       <Route path="*" element={<LoginForm />} />
       </Routes>
     </Router>
+    </AppProvider>
     );
 }
 

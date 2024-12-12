@@ -34,14 +34,6 @@ axiosInstance.interceptors.response.use(
                     console.error('Unauthorized access - possibly invalid token');
                     // Optionally, redirect to login page
                     break;
-                case 403:
-                    // Handle forbidden access
-                    console.error('Forbidden access');
-                    break;
-                case 404:
-                    // Handle resource not found
-                    console.error('Resource not found');
-                    break;
                 case 500:
                     // Handle server error
                     console.error('Server error');

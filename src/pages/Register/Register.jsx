@@ -2,52 +2,8 @@ import { useState, useEffect } from 'react'
 import { BellRing, ChevronDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { registerUser } from '../../api/create/register'
+import { KERALA_DISTRICTS, setLocalStorage } from '../../utils/utils'
 
-// Kerala districts data
-const KERALA_DISTRICTS = {
-  Kasaragod: {
-    cities: ['Kasaragod', 'Nileshwar', 'Kanhangad', 'Cheruvathur']
-  },
-  Kannur: {
-    cities: ['Kannur', 'Thalassery', 'Payyanur', 'Mattanur']
-  },
-  Wayanad: {
-    cities: ['Kalpetta', 'Sultan Bathery', 'Mananthavady', 'Meenangadi']
-  },
-  Kozhikode: {
-    cities: ['Kozhikode', 'Vadakara', 'Koyilandy', 'Ramanattukara']
-  },
-  Malappuram: {
-    cities: ['Malappuram', 'Manjeri', 'Tirur', 'Ponnani']
-  },
-  Palakkad: {
-    cities: ['Palakkad', 'Ottapalam', 'Shornur', 'Chittur']
-  },
-  Thrissur: {
-    cities: ['Thrissur', 'Chalakudy', 'Kunnamkulam', 'Irinjalakuda']
-  },
-  Ernakulam: {
-    cities: ['Kochi', 'Aluva', 'Angamaly', 'Perumbavoor']
-  },
-  Idukki: {
-    cities: ['Painavu', 'Thodupuzha', 'Munnar', 'Adimali']
-  },
-  Kottayam: {
-    cities: ['Kottayam', 'Pala', 'Changanassery', 'Vaikom']
-  },
-  Alappuzha: {
-    cities: ['Alappuzha', 'Chengannur', 'Kayamkulam', 'Haripad']
-  },
-  Pathanamthitta: {
-    cities: ['Pathanamthitta', 'Thiruvalla', 'Adoor', 'Ranni']
-  },
-  Kollam: {
-    cities: ['Kollam', 'Karunagappally', 'Punalur', 'Kottarakkara']
-  },
-  Thiruvananthapuram: {
-    cities: ['Thiruvananthapuram', 'Neyyattinkara', 'Attingal', 'Varkala']
-  }
-}
 
 export default function RegistrationForm() {
   const navigate = useNavigate()
@@ -64,7 +20,6 @@ export default function RegistrationForm() {
     city: ''
   })
 
-  // Update cities when district changes
   useEffect(() => {
     if (!formData.location) {
       setCities([])
@@ -72,7 +27,6 @@ export default function RegistrationForm() {
     }
 
     setLoading(true)
-    // Simulate API loading for better UX
     setTimeout(() => {
       const districtCities = KERALA_DISTRICTS[formData.location]?.cities || []
       setCities(districtCities)
@@ -82,6 +36,7 @@ export default function RegistrationForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target
+
     setFormData(prev => {
       if (name === 'location') {
         return {
@@ -99,6 +54,13 @@ export default function RegistrationForm() {
 
   const handleSubmit = async(e) => {
     e.preventDefault()
+    setLoading(true);
+
+    // const error = validateField(name, value.trim());
+    // if (error) {
+    //   alert(error);
+    //   return;
+    // }
     const { name, email, gender, dateOfBirth, location, city } = formData
     if (!name || !email || !gender || !dateOfBirth || !location || !city) {
       alert('Please fill in all required fields.')
@@ -111,8 +73,10 @@ export default function RegistrationForm() {
     }
 
     try{
-      await registerUser(registrationData)
-      navigate('/login') 
+      const userData = await registerUser(registrationData)
+      console.log('Registration successful:', userData)
+      setLocalStorage('token', userData.token)
+      navigate('/otp-verification') 
       } catch (error) {
       console.error('Registration failed:', error)
       alert('Registration failed. Please try again.')
@@ -124,7 +88,6 @@ export default function RegistrationForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex flex-col items-center relative overflow-hidden px-4">
-      {/* Rest of your JSX remains the same */}
       <div className="w-full max-w-md pt-6 pb-4">
         <h1 className="text-[#00B4E5] text-3xl font-bold text-center mb-6">
           User Registration
