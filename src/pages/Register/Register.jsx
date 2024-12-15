@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { BellRing, ChevronDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { registerUser } from '../../api/create/register'
-import { KERALA_DISTRICTS, setLocalStorage } from '../../utils/utils'
+import { KERALA_DISTRICTS } from '../../utils/utils'
+import { registerUser } from '../../api/userApi'
+import { useAppContext } from '../../context/AppContext'
 
 
 export default function RegistrationForm() {
   const navigate = useNavigate()
+  const{setUser} = useAppContext()
   const [districts] = useState(Object.keys(KERALA_DISTRICTS))
   const [cities, setCities] = useState([])
   const [loading, setLoading] = useState(false)
@@ -14,6 +16,7 @@ export default function RegistrationForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     gender: '',
     dateOfBirth: '',
     location: '',
@@ -74,11 +77,12 @@ export default function RegistrationForm() {
 
     try{
       const userData = await registerUser(registrationData)
-      console.log('Registration successful:', userData)
-      setLocalStorage('token', userData.token)
-      navigate('/otp-verification') 
+      if(userData){
+        setUser({phone:formData?.phone, })
+        navigate('/otp-verification') 
+      }
+
       } catch (error) {
-      console.error('Registration failed:', error)
       alert('Registration failed. Please try again.')
       } finally {
       setLoading(false)
@@ -92,8 +96,6 @@ export default function RegistrationForm() {
         <h1 className="text-[#00B4E5] text-3xl font-bold text-center mb-6">
           User Registration
         </h1>
-
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
@@ -103,7 +105,6 @@ export default function RegistrationForm() {
             placeholder="Name"
             className="w-full h-14 px-6 rounded-full border border-[#00B4E5] focus:outline-none focus:ring-2 focus:ring-[#00B4E5]/20 text-gray-600 placeholder-gray-400"
           />
-
           <input
             type="email"
             name="email"

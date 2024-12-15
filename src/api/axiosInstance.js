@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://mvdproject.onrender.com', 
+    baseURL: import.meta.env.VITE_NODE_BASE_URL, 
     headers: {
         'Content-Type': 'application/json',
     },
@@ -10,8 +10,10 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token'); 
+
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            const authToken = JSON.parse(token);
+            config.headers.Authorization = `Bearer ${authToken}`;
         }
         return config;
     },

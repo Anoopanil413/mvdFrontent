@@ -1,8 +1,16 @@
 import  { useState, useRef, useEffect } from 'react'
+import { verifyUser } from '../../api/userApi'
+import { useAppContext } from '../../context/AppContext'
+import { setLocalStorage } from '../../utils/utils'
+import { useNavigate } from 'react-router-dom'
 
 export default function VerificationForm() {
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const inputRefs = useRef([])
+    const {state,setUser} = useAppContext()
+    console.log("user", state)
+    const navigate = useNavigate()
+  
 
   useEffect(() => {
     // Initialize refs array
@@ -29,9 +37,18 @@ export default function VerificationForm() {
     }
   }
 
-  const handleVerify = () => {
-    const otpString = otp.join('')
-    console.log('Verifying OTP:', otpString)
+  const handleVerify = async() => {
+    try {
+      const otpString = otp.join('')
+      const verifyUSerOtp = await verifyUser({phone:state?.user?.phone, otp: otpString })
+      console.log('OTP verified:', verifyUSerOtp)
+      setUser(verifyUSerOtp?.user)
+      setLocalStorage('token', verifyUSerOtp?.token)
+      navigate('/dashboard')
+
+    } catch (error) {
+      console.log('Error verifying OTP:', error)
+    }
   }
 
   const handleResend = () => {

@@ -2,12 +2,11 @@ import  { createContext, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 const initialState = {
-  user: { name: '', email: '' },
+  user: {  },
+  vehicleOwnerLIst: [],
 };
 
-AppProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+
 
 
 const appReducer = (state, action) => {
@@ -25,6 +24,10 @@ const appReducer = (state, action) => {
           vehicle.id === action.payload.id ? { ...vehicle, ...action.payload } : vehicle
         ),
       };
+      case 'SET_VEHICLE_OWNER_LIST':
+        return { ...state, vehicleOwnerLIst: action.payload };
+      case 'CLEAR_VEHICLE_OWNER_LIST':
+        return { ...state, vehicleOwnerLIst: initialState.vehicleOwnerLIst };
     case 'REMOVE_VEHICLE':
       return {
         ...state,
@@ -39,11 +42,9 @@ const appReducer = (state, action) => {
 
 const AppContext = createContext();
 
-// Provider Component
 export const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
-  // Utility Methods
   const setUser = (userData) => dispatch({ type: 'SET_USER', payload: userData });
   const clearUser = () => dispatch({ type: 'CLEAR_USER' });
 
@@ -51,6 +52,9 @@ export const AppProvider = ({ children }) => {
   const updateVehicle = (vehicle) => dispatch({ type: 'UPDATE_VEHICLE', payload: vehicle });
   const removeVehicle = (vehicleId) => dispatch({ type: 'REMOVE_VEHICLE', payload: { id: vehicleId } });
   const clearVehicles = () => dispatch({ type: 'CLEAR_VEHICLES' });
+  const setVehicleOwnerList = (ownerList) => dispatch({ type: 'SET_VEHICLE_OWNER_LIST', payload: ownerList });
+  const clearVehicleOwnerList = () => dispatch({ type: 'CLEAR_VEHICLE_OWNER_LIST' });
+
 
   return (
     <AppContext.Provider
@@ -62,6 +66,7 @@ export const AppProvider = ({ children }) => {
         updateVehicle,
         removeVehicle,
         clearVehicles,
+        setVehicleOwnerList
       }}
     >
       {children}
@@ -76,4 +81,7 @@ export const useAppContext = () => {
     throw new Error('useAppContext must be used within an AppProvider');
   }
   return context;
+};
+AppProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

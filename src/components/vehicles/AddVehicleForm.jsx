@@ -1,37 +1,74 @@
-
 // import { useState } from "react";
 
 // import { Select } from "../ui/Select";
 import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
+import { Select } from "../ui/Select";
+import { useState } from "react";
+import { createVehicle } from "../../api/userApi";
+import { useNavigate } from "react-router-dom";
 
 
 export function AddVehicleForm() {
 
-    // const [vehicleType, setVehicleType] = useState("");
-    // const vehicleTypesin = [
-    //     { value: "heavy", label: "Heavy" },
-    //     { value: "four-wheeler", label: "Four Wheeler" },
-    //     { value: "two-wheeler", label: "Two Wheeler" }
-    // ]; 
-    
-    // console.log("vehicleType", vehicleType);
+    const [vehicleType, setVehicleType] = useState("");
+    const [formData, setFormData] = useState({
+        vehicleType: "",
+        name: "",
+        vehicleNumber: ""
+      })
+      const navigate = useNavigate()
+    const vehicleTypesin = [
+        { value: "Four", label: "Four Wheeler" },
+        { value: "Three", label: "Three Wheeler" },
+        { value: "Two", label: "Two Wheeler" },
+        { value: "Heavy", label: "Heavy" }
+    ]; 
+
+
+    const vehicleNumberPattern = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,2}[0-9]{4}$/i;
+
+    const handleVehicleSave = async(event) => {
+        event.preventDefault();
+        console.log("formData", formData);
+        if (!vehicleNumberPattern.test(formData.vehicleNumber)) {
+            alert("Invalid registration number format");
+            return;
+        }
+        try {
+            console.log("formData", formData);
+            await createVehicle(formData);
+            navigate("/myVehicle");
+            
+        } catch (error) {
+            
+        }
+    }
+
     return (
-        <form className="space-y-6 p-4">
-            {/* <Select value={vehicleTypesin} onValueChange={setVehicleType}> */}
-                {/* <SelectTrigger>
-                    <SelectValue placeholder="Select vehicle type" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="four-wheeler">Four Wheeler</SelectItem>
-                    <SelectItem value="two-wheeler">Two Wheeler</SelectItem>
-                </SelectContent> */}
-            {/* </Select> */}
+        <form className="space-y-6 p-4" onSubmit={handleVehicleSave}>
+            <Select 
+                options={vehicleTypesin} 
+                value={vehicleType} 
+                onChange={(e) =>{ 
+                    setVehicleType(e.target.value);
+                    setFormData({...formData, vehicleType: e.target.value});
+                }}
+                className="w-full h-12 px-6 rounded-full border border-[#00B4E5] focus:outline-none focus:ring-2 focus:ring-[#00B4E5]/20 text-gray-600 placeholder-gray-400"
+            />
+            <Input 
+                placeholder="Vehicle name"
+                className="w-full h-12 px-6 rounded-full border border-[#00B4E5] focus:outline-none focus:ring-2 focus:ring-[#00B4E5]/20 text-gray-600 placeholder-gray-400"
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
+            />
 
-            <Input placeholder="Vehicle name" />
-            <Input placeholder="Registration number" />
+            <Input 
+                placeholder="Registration number"
+                className="w-full h-12 px-6 rounded-full border border-[#00B4E5] focus:outline-none focus:ring-2 focus:ring-[#00B4E5]/20 text-gray-600 placeholder-gray-400"
+                onChange={(e) => setFormData({...formData, vehicleNumber: e.target.value})}
+            />
 
-            <Button className="w-full bg-sky-500 hover:bg-sky-600">Save</Button>
+            <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600" >Save</Button>
         </form>
     );
 }

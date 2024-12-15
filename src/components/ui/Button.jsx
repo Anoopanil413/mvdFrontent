@@ -1,7 +1,6 @@
-
 import PropTypes from 'prop-types';
 
-export const Button = ({ className = '', variant = 'default', ...props }) => {
+export const Button = ({ className = '', variant = 'default', type = 'button', ...props }) => {
   const baseStyles = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
   
   const variantStyles = {
@@ -12,6 +11,7 @@ export const Button = ({ className = '', variant = 'default', ...props }) => {
   Button.propTypes = {
     className: PropTypes.string,
     variant: PropTypes.oneOf(['default', 'ghost']),
+    type: PropTypes.string,
   };
 
   const sizeStyles = {
@@ -24,7 +24,7 @@ export const Button = ({ className = '', variant = 'default', ...props }) => {
   const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles['default']} ${className}`;
 
   return (
-    <button className={combinedClassName} {...props} />
+    <button type={type} className={combinedClassName} {...props} />
   );
 };
 

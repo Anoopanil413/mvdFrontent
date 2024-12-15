@@ -5,11 +5,11 @@ export const Select = ({ className = '', options, ...props }) => {
   return (
     <div className="relative">
       <select
-        className={`flex h-10 w-full appearance-none rounded-md border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 ${className}`}
+        className={`flex h-10 w-full appearance-none  border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 ${className}`}
         {...props}
       >
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} className=''>
             {option.label}
           </option>
         ))}

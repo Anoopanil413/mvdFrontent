@@ -1,9 +1,22 @@
 import  { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../../api/userApi';
+import { useAppContext } from '../../context/AppContext';
 
 export default function LoginForm() {
   const [phoneNumber, setPhoneNumber] = useState('')
   const navigate = useNavigate();
+  const {setUser} = useAppContext()
+
+  const handleLogin =async()=>{
+    if(phoneNumber.length===10){
+      await loginUser({phone:phoneNumber})
+      setUser({phone:phoneNumber })
+      navigate('/otp-verification')
+    }else{
+      alert('Please enter a valid phone number')
+    }
+  }
 
 
   return (
@@ -42,7 +55,9 @@ export default function LoginForm() {
         </div>
 
 
-        <button className="w-full h-14 bg-white rounded-full text-[#00B4E5] font-bold text-lg shadow-lg hover:bg-white/90 transition-colors">
+        <button className="w-full h-14 bg-white rounded-full text-[#00B4E5] font-bold text-lg shadow-lg hover:bg-white/90 transition-colors"
+        onClick={handleLogin}
+        >
           SEND VERIFICATION CODE
         </button>
         <div className='w-full flex justify-center mb-4 text-sm text-white font-medium cursor-pointer' onClick={()=>navigate('/registration')}>
