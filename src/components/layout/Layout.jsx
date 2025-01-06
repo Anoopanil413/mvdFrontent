@@ -42,7 +42,19 @@ const DashboardLayout = ({ children }) => {
     navigate('/vehicleSearch');
   }
   const handleClear = ()=>{
-    localStorage.clear();
+    console.log("Clearing the token");
+    localStorage.removeItem('token');
+  }
+  const handleNotification = async()=>{
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        console.log('Notifications enabled!');
+      } else {
+        console.log('Notifications denied.');
+      }
+    }
+
   }
 
   return (
@@ -82,7 +94,9 @@ const DashboardLayout = ({ children }) => {
   
   <div className="my-4 border-t border-gray-200" />
   
-  <NavItem icon={LogOut} to="/logout" label="Logout" variant="danger" onClick={handleClear}/>
+  <div onClick={handleClear}>
+    <NavItem icon={LogOut} to="/login" label="Logout" variant="danger" />
+  </div>
 </nav>
 
       </aside>
@@ -98,7 +112,7 @@ const DashboardLayout = ({ children }) => {
           
           <div className="flex items-center space-x-4">
             <button className="relative rounded p-1 hover:bg-gray-100">
-              <Bell className="h-6 w-6 text-gray-500" />
+              <Bell className="h-6 w-6 text-gray-500" onClick={handleNotification}/>
               <span className="absolute right-0 top-0 h-2 w-2 rounded-full bg-red-500" />
             </button>
             <Button  onClick={handleSearch} className=' border-2 border-blue-800/35'>
@@ -108,7 +122,7 @@ const DashboardLayout = ({ children }) => {
           </div>
         </header>
 
-        <main className=" overflow-auto p-4 ">
+        <main className=" overflow-auto p-4 max-h-[90vh]">
           {children}
         </main>
       </div>

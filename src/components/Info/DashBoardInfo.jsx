@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bell, Car, MapPin, Shield, Users } from 'lucide-react';
-import letMEgo from '../../../public/parkingact3.jpeg';
+import letMEgo from '../../assets/parkingact3.jpeg';
 
 const DashBoardInfo = () => {
     return (

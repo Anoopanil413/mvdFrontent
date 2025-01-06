@@ -69,7 +69,7 @@ export const sendUserMessage = async(data)=>{
         throw error;
     }
 }
-export const ValidateToken = async(data)=>{
+export const ValidateToken = async()=>{
     try {
         const response = await axiosInstance.get('/api/users/validateUser');
         return response.data;
@@ -78,3 +78,42 @@ export const ValidateToken = async(data)=>{
         throw error;
     }
 }
+export const sendFCMToken = async(data)=>{
+    try {
+        const response = await axiosInstance.post('/api/users/fcmToken',data);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting my vehicles:', error);
+        throw error;
+    }
+}
+export const updateUserProfile = async(data)=>{
+    try {
+        const response = await axiosInstance.patch('/api/users/updateProfile',data);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting my vehicles:', error);
+        throw error;
+    }
+}
+
+export const updateVehicle = async(data)=>{
+    try {
+        const response = await axiosInstance.patch('/api/users/updateVehicle',data);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting my vehicles:', error);
+        throw error;
+    }
+}
+export const deleteVehicle = async(data)=>{
+    try {
+        const response  =  await axiosInstance.delete('/api/users/deleteVehicle',{params:{id:data}});
+        return  response.data;
+        
+    } catch (error) {
+        
+    }
+};
+
+

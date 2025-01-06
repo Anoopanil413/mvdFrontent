@@ -7,13 +7,14 @@ import { Select } from "../ui/Select";
 import { useState } from "react";
 import { createVehicle } from "../../api/userApi";
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../Toast/Toast";
 
 
 export function AddVehicleForm() {
 
     const [vehicleType, setVehicleType] = useState("");
     const [formData, setFormData] = useState({
-        vehicleType: "",
+        vehicleType: "Four",
         name: "",
         vehicleNumber: ""
       })
@@ -32,7 +33,7 @@ export function AddVehicleForm() {
         event.preventDefault();
         console.log("formData", formData);
         if (!vehicleNumberPattern.test(formData.vehicleNumber)) {
-            alert("Invalid registration number format");
+            showToast("Invalid format!", "error");
             return;
         }
         try {
@@ -41,7 +42,8 @@ export function AddVehicleForm() {
             navigate("/myVehicle");
             
         } catch (error) {
-            
+            showToast("Something went wrong!", "error");
+
         }
     }
 
@@ -49,7 +51,7 @@ export function AddVehicleForm() {
         <form className="space-y-6 p-4" onSubmit={handleVehicleSave}>
             <Select 
                 options={vehicleTypesin} 
-                value={vehicleType} 
+                value={vehicleType || vehicleTypesin[0].value}
                 onChange={(e) =>{ 
                     setVehicleType(e.target.value);
                     setFormData({...formData, vehicleType: e.target.value});

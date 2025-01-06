@@ -2,6 +2,9 @@ import  { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../../api/userApi';
 import { useAppContext } from '../../context/AppContext';
+import imagei from '../../assets/2.png'
+import imagein from '../../assets/1.png'
+import { showToast } from '../../components/Toast/Toast';
 
 export default function LoginForm() {
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -10,11 +13,18 @@ export default function LoginForm() {
 
   const handleLogin =async()=>{
     if(phoneNumber.length===10){
-      await loginUser({phone:phoneNumber})
-      setUser({phone:phoneNumber })
-      navigate('/otp-verification')
+      try {
+        
+        await loginUser({phone:phoneNumber})
+        setUser({phone:phoneNumber })
+        navigate('/otp-verification')
+      } catch (error) {
+        showToast("Login failed!", "error");
+
+      }
     }else{
-      alert('Please enter a valid phone number')
+            showToast("Invlaid number!", "warning");
+      
     }
   }
 
@@ -23,11 +33,9 @@ export default function LoginForm() {
     <div className="min-h-screen bg-gradient-to-b from-[#00B4E5] to-[#0086AD] flex flex-col items-center relative overflow-hidden">
       {/* Header Illustration */}
       <div className="w-full max-w-md relative">
-        <div className="absolute left-1/2 -translate-x-1/2 top-20 w-24 h-24 bg-[#00B4E5] rounded-full flex items-center justify-center shadow-lg">
-          <img src="/placeholder.svg" alt="Location icon" className="w-12 h-12 object-contain" />
-        </div>
+       
         <div className="w-full h-64 relative">
-          <img src="/placeholder.svg" alt="Cityscape" className="w-full h-full object-contain" />
+          <img src={imagei} alt="Cityscape" className="w-full h-full object-contain" />
         </div>
       </div>
 

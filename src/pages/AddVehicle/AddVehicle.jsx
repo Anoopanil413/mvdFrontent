@@ -2,6 +2,7 @@ import React from 'react';
 import { AddVehicleForm } from '../../components/vehicles/AddVehicleForm';
 
 export function AddVehicle() {
+    console.log("ffdfdfdfd")
     return (
             <main>
 

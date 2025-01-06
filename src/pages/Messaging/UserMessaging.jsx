@@ -18,7 +18,6 @@ const [user, setUser] = React.useState(null);
 
 useEffect(() => {
     const vehicleOwner = state?.vehicleOwnerLIst.find(owner => owner._id === id);
-    console.log("vehicleOwner",vehicleOwner)
 
     if(!vehicleOwner){
         navigate('/vehicleSearch')

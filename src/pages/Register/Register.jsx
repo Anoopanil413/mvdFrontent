@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { KERALA_DISTRICTS } from '../../utils/utils'
 import { registerUser } from '../../api/userApi'
 import { useAppContext } from '../../context/AppContext'
+import { showToast } from '../../components/Toast/Toast'
 
 
 export default function RegistrationForm() {
@@ -66,7 +67,7 @@ export default function RegistrationForm() {
     // }
     const { name, email, gender, dateOfBirth, location, city } = formData
     if (!name || !email || !gender || !dateOfBirth || !location || !city) {
-      alert('Please fill in all required fields.')
+      showToast("Invalid fields!", "warning");
       return
     }
     const registrationData = {
@@ -83,7 +84,8 @@ export default function RegistrationForm() {
       }
 
       } catch (error) {
-      alert('Registration failed. Please try again.')
+          showToast("Regostration failed!", "error");
+        
       } finally {
       setLoading(false)
       }
@@ -91,7 +93,7 @@ export default function RegistrationForm() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex flex-col items-center relative overflow-hidden px-4">
+    <div className="min-h-screen bg-gradient-to-b from-white to-[#00B4E5]  flex flex-col items-center relative overflow-hidden px-4">
       <div className="w-full max-w-md pt-6 pb-4">
         <h1 className="text-[#00B4E5] text-3xl font-bold text-center mb-6">
           User Registration
@@ -195,28 +197,28 @@ export default function RegistrationForm() {
 
           <button
             type="submit"
-            className="w-full h-14 bg-[#00B4E5] rounded-full text-white font-bold text-lg shadow-lg hover:bg-[#00B4E5]/90 transition-colors mt-8"
+            className="w-full h-14 bg-[#00B4E5] border border-blue-900 rounded-full text-white font-bold text-lg shadow-lg hover:bg-[#00B4E5]/90 transition-colors mt-8"
           >
             NEXT
           </button>
         </form>
 
         <div
-          className="w-full flex justify-center mb-4 text-sm text-[#00B4E5] font-medium cursor-pointer"
+          className="w-full flex justify-center mt-2 mb-4 text-sm text-white font-medium cursor-pointer"
           onClick={() => navigate('/login')}
         >
-          Log in
+          Already have an account? Log in
         </div>
       </div>
 
       {/* Cityscape Illustration */}
-      <div className="fixed bottom-0 left-0 right-0 pointer-events-none">
+      {/* <div className="fixed bottom-0 left-0 right-0 pointer-events-none">
         <img
           src="/placeholder.svg"
           alt="Cityscape"
           className="w-full h-32 object-cover"
         />
-      </div>
+      </div> */}
 
       {/* Notification Bell */}
       <div className="fixed bottom-8 right-8">

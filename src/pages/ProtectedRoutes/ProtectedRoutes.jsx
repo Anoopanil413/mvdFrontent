@@ -3,6 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { ValidateToken } from "../../api/userApi";
 import { useAppContext } from "../../context/AppContext";
 import DashboardLayout from "../../components/layout/Layout";
+import LoaderComp from "../../components/Loader/Loader";
 
 const ProtectedRoute = () => {
   const { user, setUser } = useAppContext();
@@ -25,8 +26,7 @@ const ProtectedRoute = () => {
     };
     validateTokenApi();
   }, []);
-
-  if (isLoading) return <div>Loading...</div>; 
+  if (isLoading) return <div><LoaderComp/></div>; 
 
   return token  ? (
     <DashboardLayout>

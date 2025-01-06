@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Menu, Bell, Search, CarFront } from 'lucide-react';
+import { Menu, Bell, Search, CarFront, Loader } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
-import DashboardLayout from '../../components/layout/Layout';
 import { searchVehicle } from '../../api/userApi';
 import { useAppContext } from '../../context/AppContext';
 import VehicleSearchResults from '../../components/vehicleOwnerList/VehicleOwnerList';
 import NoVehicleResults from '../../components/vehicleOwnerList/NoVehicleOwnersAssociated';
+import imageLand from '../../assets/landscape.png';
+import searchVEhicle from '../../assets/4.png'
+import { showToast } from '../../components/Toast/Toast';
 
 const SearchVehicle = () => {
   const [vehicleNumber, setVehicleNumber] = useState('');
@@ -24,20 +26,22 @@ const SearchVehicle = () => {
   const handleFindVehicleOwner = async() => {
     try {
         if (!vehicleNumberPattern.test(vehicleNumber.trim())) {
-            alert('Please enter a valid vehicle number.');
+          showToast("Invalid number!", "error");
             return;
         }
         const vehicleNumb = vehicleNumber.trim().toLowerCase();
         const userLists = await searchVehicle({vehicleNumber:vehicleNumb});
-        console.log("userLists",userLists)
         setVehicleOwnerList(userLists);
         setVehicleOwneravailable(true);
  
     } catch (error) {
         setVehicleOwneravailable(false);
+        showToast("Search failed!", "error");
+
     }
 
   }
+
 
   return (
     <>
@@ -47,9 +51,17 @@ const SearchVehicle = () => {
      <div className="bg-gray-50 flex flex-col items-center justify-center h-auto">
 
 
+
           <div className="w-full flex flex-col items-center justify-center space-y-8">
+        <div className="max-w-sm mx-auto">
+          <img 
+            src={searchVEhicle}
+            alt="City skyline"
+            className=""
+            />
+        </div>
             <div className="text-center md:text-left">
-              <h2 className="text-2xl font-medium text-gray-800">Good Afternoon {userName}</h2>
+              <h2 className="text-2xl font-medium text-gray-800 text-center">Hello {state?.user?.name}</h2>
               <p className="text-gray-600 mt-2">
                 We will help you find out the vehicle blocking your way.
               </p>
@@ -84,30 +96,30 @@ const SearchVehicle = () => {
 
           </div>
 
-          <div className="w-full ">
+          {/* <div className="w-full ">
             <div className="relative">
               <div className=" z-10 ">
                 <img 
-                  src="/api/placeholder/500/300"
+                  src={imageLand}
                   alt="Blocked vehicles illustration"
                   className="w-full rounded-lg shadow-xl"
                 />
               </div>
-{/*                                           
+                                          
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-blue-100 rounded-full opacity-50" />
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-blue-50 rounded-full opacity-50" /> */}
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-blue-50 rounded-full opacity-50" />
             </div>
-          </div>
+          </div> */}
 
 
       {/* City Illustration at Bottom */}
       <div className="fixed bottom-0 left-0 right-0 pointer-events-none">
         <div className="max-w-6xl mx-auto">
-          <img 
-            src="/api/placeholder/1200/200"
+          {/* <img 
+            src={imageLand}
             alt="City skyline"
             className="w-full opacity-30"
-            />
+            /> */}
         </div>
       </div>
 

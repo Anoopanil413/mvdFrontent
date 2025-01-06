@@ -1,3 +1,5 @@
+
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^[0-9]{10}$/;
 
@@ -84,3 +86,5 @@ export     const validateField = (name, value) => {
       cities: ['Thiruvananthapuram', 'Neyyattinkara', 'Attingal', 'Varkala']
     }
   }
+
+
