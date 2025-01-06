@@ -10,11 +10,7 @@ export default defineConfig({
     react(),
     VitePWA({
       injectRegister: 'auto',
-      strategies: 'generateSW', 
-      injectManifest: {
-        swDest: 'public/firebase-messaging-sw.js', 
-        swSrc: 'public/firebase-messaging-sw.js',
-      },
+      strategies: 'generateSW',
       manifest: {
         name: 'Let Me Go',
         short_name: 'LetMeGo',
