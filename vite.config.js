@@ -12,10 +12,8 @@ export default defineConfig({
       injectRegister: 'auto',
       strategies: 'injectManifest',
       injectManifest: {
-        injectionPoint: undefined,
-        rollupFormat: 'iife',
-        swDest: 'dist/firebase-messaging-sw.js',
-        swSrc: 'src/firebase-messaging-sw.js',
+        swDest: 'public/firebase-messaging-sw.js', 
+        swSrc: 'public/firebase-messaging-sw.js',
       },
       manifest: {
         name: 'Let Me Go',
