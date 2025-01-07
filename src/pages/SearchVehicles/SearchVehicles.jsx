@@ -16,6 +16,7 @@ const SearchVehicle = () => {
   const {setVehicleOwnerList,state,clearVehicleOwnerList} = useAppContext();
   const userName = "Sarath Nambiar";
   const vehicleNumberPattern = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,2}[0-9]{4}$/i;
+  console.log("statattatatata",state)
 
   const handleUseraAvailableToggel = () => {
     setVehicleOwneravailable(false);
@@ -31,6 +32,7 @@ const SearchVehicle = () => {
         }
         const vehicleNumb = vehicleNumber.trim().toLowerCase();
         const userLists = await searchVehicle({vehicleNumber:vehicleNumb});
+        console.log("userList",userLists)
         setVehicleOwnerList(userLists);
         setVehicleOwneravailable(true);
  

@@ -4,16 +4,17 @@ import { Switch } from "../../components/ui/Switch"
 import { useState } from "react"
 import { updateUserProfile } from '../../api/userApi'
 import { showToast } from '../../components/Toast/Toast'
+import { useAppContext } from '../../context/AppContext'
 
 export default function PrivacySettings() {
   const [hideName, setHideName] = useState(false)
-  const [hideNumber, setHideNumber] = useState(false)
+  const {state,setUser} = useAppContext()
 
 
   const handleUserPrivacyUpdate = async()=>{
     try {
-      setHideNumber(!hideNumber)
-      const response = await updateUserProfile({phoneVisible:!hideNumber})
+      const response = await updateUserProfile({phoneVisible:!state.user.phoneVisible})
+      setUser(response.user);
       
     } catch (error) {
       showToast("Update failed!", "error");
@@ -73,8 +74,8 @@ export default function PrivacySettings() {
             </label>
             <Switch
               id="hide-number"
-              checked={hideNumber}
-              onCheckedChange={setHideNumber}
+              checked={state.user.phoneVisible}
+              onCheckedChange={!state.user.phoneVisible}
               onClick={handleUserPrivacyUpdate}
             />
           </div>
