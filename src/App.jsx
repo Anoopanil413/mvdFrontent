@@ -61,6 +61,7 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/registration" element={<RegistrationForm />} />
           <Route path="/otp-verification" element={<VerificationForm />} />
+          <Route path="/" element={<LoginForm />} />
           </Route>
 
           <Route element={<ProtectedRoute />}>
