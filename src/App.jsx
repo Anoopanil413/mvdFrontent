@@ -63,7 +63,6 @@ function App() {
           <Route path="/otp-verification" element={<VerificationForm />} />
           <Route path="/" element={<LoginForm />} />
           </Route>
-
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/vehicleSearch" element={<SearchVehicle />} />
