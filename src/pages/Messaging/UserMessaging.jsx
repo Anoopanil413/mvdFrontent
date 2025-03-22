@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Phone, Mail, Image, Bell, Home, Eye, EyeOff, Badge, BadgeAlert } from 'lucide-react';
+import { Phone, Mail, Image, Bell, Home, Eye, EyeOff, Badge, BadgeAlert,MessageCircleIcon } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { useAppContext } from '../../context/AppContext';
 import {  useNavigate, useSearchParams } from 'react-router-dom';
 import MessageModal from '../../components/Modal/MessageMOdal';
+import { niotificationTypes } from '../../utils/utils';
+
+
 
 const UserMessagingInterface = () => {
   const [showPhone, setShowPhone] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageType, setMessageType] = useState(niotificationTypes.sendMessage);
   const {state} = useAppContext();
   const navigate = useNavigate();
 
@@ -29,7 +33,6 @@ useEffect(() => {
 const handleSendingSms = () => {
     console.log("Sending SMS")
     setIsModalOpen(true);
-
 
 }
 
@@ -69,16 +72,21 @@ const handleSendingSms = () => {
         <Card className="bg-white rounded-xl shadow-xl ">
   <div className="grid grid-cols-2 gap-y-2 gap-x-4 place-items-center">
     {[
-      { icon: Phone, label: 'Call User', color: 'bg-green-500' },
-      { icon: Mail, label: 'Send SMS', color: 'bg-blue-500' },
-      { icon: Image, label: 'Send Image', color: 'bg-purple-500' },
-      { icon: Bell, label: 'Send Notification', color: 'bg-orange-500' }
+      { icon: Phone, label: 'Call User', color: 'bg-green-500', onClick: () => setMessageType(niotificationTypes.callUser) },
+      { icon: MessageCircleIcon, label: 'Send SMS', color: 'bg-blue-500',onClick: () => setMessageType(niotificationTypes.sendMessage) },
+      { icon: Image, label: 'Send Image', color: 'bg-purple-500',onClick: () => setMessageType(niotificationTypes.sendImage) },
+      { icon: Bell, label: 'Send Notification', color: 'bg-orange-500',onClick: () => setMessageType(niotificationTypes.sendNotification) },
     ].map((action, index) => (
       <Button
         key={index}
         variant="ghost"
         className="flex flex-col items-center justify-center w-full max-w-[150px] h-[150px] hover:bg-gray-50 rounded-xl transition-all duration-300 group"
-        onClick={handleSendingSms}
+        onClick={()=>{
+
+          action.onClick()
+          handleSendingSms()
+        }
+        }
         >
         <div
           className={`${action.color} p-4 rounded-full mb-3 group-hover:scale-110 transition-transform`}
@@ -112,6 +120,7 @@ const handleSendingSms = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         user={user}
+        messageType={messageType}
       />
 
   </>

@@ -88,3 +88,23 @@ export     const validateField = (name, value) => {
   }
 
 
+  export const customMessage = (user)=>{
+  // Predefined message suggestions
+   return   [
+  `Your vehicle ${user?.vehicleNumber} is blocking the driveway.`,
+  `Your vehicle ${user?.vehicleNumber} is causing an obstruction.`,
+  `Kindly move your vehicle ${user?.vehicleNumber} to avoid inconvenience.`,
+  `Your vehicle ${user?.vehicleNumber} needs immediate attention.`,
+  `Please relocate your vehicle ${user?.vehicleNumber} to a proper spot.`,
+];
+  }
+
+
+  export const niotificationTypes = {
+    sendMessage: 'sendMessage',
+    sendImage: 'sendImage',
+    sendNotification: 'sendNotification',
+    callUser: 'callUser',
+  }
+
+

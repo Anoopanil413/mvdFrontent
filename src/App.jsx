@@ -12,47 +12,19 @@ import ProtectedRoute from "./pages/ProtectedRoutes/ProtectedRoutes";
 import PageNotFound from "./components/Notfound/PageNOtFound";
 import { useEffect } from "react";
 import PrivacySettings from "./pages/UserSettings/Usersettigs";
-import { getToken, onMessage } from "@firebase/messaging";
-import { sendFCMToken } from "./api/userApi";
-import { setLocalStorage } from "./utils/utils";
-import Message from "./components/Message/Message";
-import { messaging } from "./firebase/firebase";
+
 import Toastify from "./components/Toast/Toast";
 import PublicRoute from "./pages/PublicRoutes/PublicRoutes";
-const { VITE_APP_VAPID_KEY } = import.meta.env;
-
-   const requestNotificationPermission = async () => {
-  try {
-    const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      const registration = await navigator.serviceWorker.register("../service-worker.js");
-
-      const token = await getToken(messaging, {
-        vapidKey: VITE_APP_VAPID_KEY, 
-      });
-      console.log("FCM Token:", token);
-      await sendFCMToken({token});
-     setLocalStorage('fcmToken', token);
-      
-    } else {
-      console.error("Notification permission denied.");
-    }
-  } catch (error) {
-    console.error("Error getting FCM token:", error);
-  }
-};
+import { NotificationProvider } from "./context/Notificationcontext";
 
 function App() {
-  onMessage(messaging, (payload) => {
-    toast(<Message notification={payload.notification} />);
-  });
-
-  useEffect(() => {
-    requestNotificationPermission();
-  }, []);
+  
+  
 
   return (
     <AppProvider>
+      <NotificationProvider>
+
             <Toastify />
 
       <Router>
@@ -76,6 +48,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
+      </NotificationProvider>
     </AppProvider>
   );
 }

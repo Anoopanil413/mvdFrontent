@@ -1,6 +1,5 @@
 import React from 'react';
 import DashBoardInfo from '../../components/Info/DashBoardInfo';
-import { useAppContext } from '../../context/AppContext';
 import SearchVehicle from '../SearchVehicles/SearchVehicles';
 
 const Dashboard = () => {

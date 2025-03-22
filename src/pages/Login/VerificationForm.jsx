@@ -5,13 +5,13 @@ import { setLocalStorage } from '../../utils/utils'
 import { useNavigate } from 'react-router-dom'
 import imagei from '../../assets/2.png'
 import imagein from '../../assets/1.png'
+import { showToast } from '../../components/Toast/Toast'
 
 
 export default function VerificationForm() {
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const inputRefs = useRef([])
     const {state,setUser} = useAppContext()
-    console.log("user", state)
     const navigate = useNavigate()
   
 

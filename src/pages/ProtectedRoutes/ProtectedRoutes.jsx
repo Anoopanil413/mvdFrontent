@@ -6,7 +6,7 @@ import DashboardLayout from "../../components/layout/Layout";
 import LoaderComp from "../../components/Loader/Loader";
 
 const ProtectedRoute = () => {
-  const { user, setUser } = useAppContext();
+  const {  setUser } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("token");
 
@@ -15,7 +15,6 @@ const ProtectedRoute = () => {
       if (token) {
         try {
           const response = await ValidateToken();
-          console.log("resposnes validation", response);
           setUser(response?.user); 
         } catch (error) {
           console.error("Invalid token", error);
@@ -27,6 +26,8 @@ const ProtectedRoute = () => {
     validateTokenApi();
   }, []);
   if (isLoading) return <div><LoaderComp/></div>; 
+
+
 
   return token  ? (
     <DashboardLayout>

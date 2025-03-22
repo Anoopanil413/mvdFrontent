@@ -1,7 +1,7 @@
 
 
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey:import.meta.env.VITE_APP_API_KEY,
@@ -13,31 +13,38 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-let messaging;
-if (typeof window !== 'undefined'){
-  messaging = getMessaging(firebaseApp);
-}
+
+  const messaging = getMessaging(firebaseApp);
+
+
 export const requestForToken = async () => {
   try {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+
     const currentToken = await getToken(messaging, {
-      vapidKey: 'YOUR_VAPID_KEY'
+      vapidKey: import.meta.env.VITE_APP_VAPID_KEY
     });
     if (currentToken) {
       console.log('Current token:', currentToken);
       return currentToken;
     }
     console.log('No registration token available');
+  } else {
+    throw new Error('Notification permission denied');
+  }
   } catch (err) {
     console.log('An error occurred while retrieving token:', err);
   }
 };
 
-export const onMessageListener = () =>
-  new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      resolve(payload);
-    });
-});
+
+
+export const onForegroundMessage = (callback) => {
+  return onMessage(messaging, (payload) => {
+    callback(payload);
+  });
+};
 
 export { messaging, firebaseApp };
 

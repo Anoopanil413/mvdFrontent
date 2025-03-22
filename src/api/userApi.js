@@ -116,4 +116,16 @@ export const deleteVehicle = async(data)=>{
     }
 };
 
+export const sendNotificationToUser =  async (data)=>{
+    try {
+        const response = await axiosInstance.post('/api/users/sendNotification',data);
+        return response.data;
+        
+    } catch (error) {
+        console.log("error",error)
+        
+    }
+
+}
+
 
