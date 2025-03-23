@@ -7,6 +7,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useAppContext } from '../../context/AppContext';
 
 import profileImage from "../../assets/profile.jpg";
+import { useNotifications } from '../../context/Notificationcontext';
+import NotificationsPopover from '../Notifications/NotificationsPopover';
 
 const NavItem = ({ icon: Icon, label, to, variant = "default" }) => {
   const location = useLocation(); // Get the current path
@@ -36,13 +38,15 @@ const DashboardLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const {state} = useAppContext();
+  const { handleLogout } = useNotifications();
+
 
 
   const handleSearch = ()=>{
     navigate('/vehicleSearch');
   }
   const handleClear = ()=>{
-    console.log("Clearing the token");
+    handleLogout();
     localStorage.removeItem('token');
   }
   const handleNotification = async()=>{
@@ -111,10 +115,9 @@ const DashboardLayout = ({ children }) => {
           </button>
           
           <div className="flex items-center space-x-4">
-            <button className="relative rounded p-1 hover:bg-gray-100">
-              <Bell className="h-6 w-6 text-gray-500" onClick={handleNotification}/>
-              <span className="absolute right-0 top-0 h-2 w-2 rounded-full bg-red-500" />
-            </button>
+
+            <NotificationsPopover />
+
             <Button  onClick={handleSearch} className=' border-2 border-blue-800/35'>
             <Search className="h-5 w-5 white mr-2" />
             <span>Search Vehicles</span>

@@ -10,7 +10,7 @@ import imageLand from '../../assets/landscape.png';
 import searchVEhicle from '../../assets/4.png'
 import { showToast } from '../../components/Toast/Toast';
 
-const SearchVehicle = () => {
+const   SearchVehicle = () => {
   const [vehicleNumber, setVehicleNumber] = useState('');
   const [vehicleOwnerAvailable,setVehicleOwneravailable] = useState(false);
   const {setVehicleOwnerList,state,clearVehicleOwnerList} = useAppContext();
@@ -30,7 +30,6 @@ const SearchVehicle = () => {
         }
         const vehicleNumb = vehicleNumber.trim().toLowerCase();
         const userLists = await searchVehicle({vehicleNumber:vehicleNumb});
-        console.log("userList",userLists)
         setVehicleOwnerList(userLists);
         setVehicleOwneravailable(true);
  

@@ -31,7 +31,6 @@ useEffect(() => {
 }, [id, state.vehicleOwners]);
 
 const handleSendingSms = () => {
-    console.log("Sending SMS")
     setIsModalOpen(true);
 
 }

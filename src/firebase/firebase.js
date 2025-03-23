@@ -26,7 +26,6 @@ export const requestForToken = async () => {
       vapidKey: import.meta.env.VITE_APP_VAPID_KEY
     });
     if (currentToken) {
-      console.log('Current token:', currentToken);
       return currentToken;
     }
     console.log('No registration token available');

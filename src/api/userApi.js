@@ -126,6 +126,28 @@ export const sendNotificationToUser =  async (data)=>{
         
     }
 
+};
+
+export const getunreadNotifications = async ()=>{
+    try {
+        const response = await axiosInstance.get('/api/users/unreadNotifications');
+        return response.data;
+        
+    } catch (error) {
+        console.log("error",error)
+        
+    }
+}
+
+export const clearAllNotifications = async ()=>{
+    try {
+        const response = await axiosInstance.post('/api/users/clearAllNotifications');
+        return response.data;
+        
+    } catch (error) {
+        console.log("error",error)
+        
+    }
 }
 
 

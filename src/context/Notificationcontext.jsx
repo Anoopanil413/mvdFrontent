@@ -3,6 +3,7 @@ import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { onForegroundMessage, requestForToken } from '../firebase/firebase';
 import { sendFCMToken } from '../api/userApi';
+import { useAppContext } from './AppContext';
 
 const NotificationContext = createContext();
 
@@ -10,13 +11,23 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [firebaseToken, setFirebaseToken] = useState(null);
   const [permissionGranted, setPermissionGranted] = useState(false);
+  const [unsubscribeFunction, setUnsubscribeFunction] = useState(null);
+
   const usertoken = localStorage.getItem("token");
+  const {state} = useAppContext();
+  const user =  state.user;
 
   // Initialize Firebase messaging and request permission
   useEffect(() => {
     const initializeNotifications = async () => {
       try {
         // Request permission and get token
+        if (!usertoken) {
+          // If no user token, unregister service worker
+          await unregisterServiceWorker();
+          return;
+        }
+        
         const token = await requestForToken();
         
         if (token) {
@@ -31,14 +42,13 @@ export const NotificationProvider = ({ children }) => {
     };
 
     initializeNotifications();
-  }, [usertoken]);
+  }, [usertoken,user]);
 
   // Listen for foreground messages
   useEffect(() => {
-    if (!permissionGranted) return;
+    if (!permissionGranted || !usertoken) return;
     
     const unsubscribe = onForegroundMessage((payload) => {
-      console.log('Received foreground message:', payload);
       
       // Add notification to state
       setNotifications((prev) => [
@@ -60,26 +70,45 @@ export const NotificationProvider = ({ children }) => {
         });
       }
     });
-    
-    return () => {
-      unsubscribe && unsubscribe();
-    };
-  }, [permissionGranted]);
+    setUnsubscribeFunction(() => unsubscribe);
 
-  // Send token to backend
-  const sendTokenToServer = async (token) => {
+     
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [permissionGranted,usertoken,user]);
+
+  const unregisterServiceWorker = async () => {
     try {
-      const response = await axios.post('/api/notifications/token', { token }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming this is where you store the auth token
-        }
-      });
+      // Clean up subscription
+      if (unsubscribeFunction) {
+        unsubscribeFunction();
+        setUnsubscribeFunction(null);
+      }
       
-      console.log('Token saved to server:', response.data);
+      // Reset states
+      setFirebaseToken(null);
+      setPermissionGranted(false);
+      setNotifications([]);
+      
+      // Unregister the service worker
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        
+        for (const registration of registrations) {
+          // You might want to be more specific about which service worker to unregister
+          // by checking the script URL if you have multiple service workers
+          await registration.unregister();
+          console.log('Service worker unregistered successfully');
+        }
+      }
+      
+      localStorage.removeItem('fcm_token');
+      localStorage.removeItem('token');
+      
       return true;
     } catch (error) {
-      console.error('Error saving token to server:', error);
+      console.error('Error unregistering service worker:', error);
       return false;
     }
   };
@@ -99,6 +128,10 @@ export const NotificationProvider = ({ children }) => {
   const clearNotifications = () => {
     setNotifications([]);
   };
+  const handleLogout = async () => {
+    await unregisterServiceWorker();
+    
+  };
 
   return (
     <NotificationContext.Provider
@@ -109,6 +142,8 @@ export const NotificationProvider = ({ children }) => {
         clearNotifications,
         permissionGranted,
         firebaseToken,
+        handleLogout,
+        unregisterServiceWorker
       }}
     >
       {children}
