@@ -51,7 +51,7 @@ if (self.__WB_MANIFEST) {
      });
   })
   .catch((error) => {
-    console.error("Error initializing Firebase in service worker:", error);
+    console.error("Error initializing Firebase in service worker::::", error);
   });
 
 

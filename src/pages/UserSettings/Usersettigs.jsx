@@ -75,9 +75,12 @@ export default function PrivacySettings() {
             <Switch
               id="hide-number"
               checked={state.user.phoneVisible}
-              onCheckedChange={!state.user.phoneVisible}
+              onCheckedChange={state.user.phoneVisible}
               onClick={handleUserPrivacyUpdate}
             />
+            <div>
+              ddd
+            </div>
           </div>
         </div>
 

@@ -17,13 +17,10 @@ export const NotificationProvider = ({ children }) => {
   const {state} = useAppContext();
   const user =  state.user;
 
-  // Initialize Firebase messaging and request permission
   useEffect(() => {
     const initializeNotifications = async () => {
       try {
-        // Request permission and get token
         if (!usertoken) {
-          // If no user token, unregister service worker
           await unregisterServiceWorker();
           return;
         }
